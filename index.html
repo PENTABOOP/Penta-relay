@@ -5,141 +5,176 @@
   <title>Firebase Relay Control Dashboard</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      text-align: center;
-      background-color: #f9f9f9;
-      margin: 0;
-      padding: 0 10px 40px;
-      display: flex;
-      flex-direction: column;
-      min-height: 100vh;
-      justify-content: space-between;
-    }
-    h1 {
-      margin-top: 30px;
-      font-size: 1.8rem;
-    }
-    .relay-card {
-      display: inline-block;
-      background-color: white;
-      padding: 20px;
-      margin: 15px;
-      border-radius: 15px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-      width: 220px;
-      vertical-align: top;
-    }
-    .relay-card h2 {
-      margin-bottom: 10px;
-      font-size: 1.3rem;
-    }
-    .relay-card p {
-      margin-bottom: 10px;
-      font-size: 1rem;
-    }
-    .relay-card button {
-      padding: 10px 20px;
-      border: none;
-      border-radius: 10px;
-      color: white;
-      background-color: blue;
-      cursor: pointer;
-      font-size: 16px;
-      width: 90%;
-      transition: opacity 0.3s ease;
-    }
-    .relay-card button:hover {
-      opacity: 0.8;
-    }
-    #allOffBtn, #logoutBtn {
-      max-width: 300px;
-      width: 90%;
-      padding: 12px 25px;
-      font-size: 16px;
-      border: none;
-      border-radius: 10px;
-      cursor: pointer;
-      margin: 15px auto;
-      display: block;
-      color: white;
-      transition: opacity 0.3s ease;
-    }
-    #allOffBtn {
-      background-color: #d32f2f;
-    }
-    #allOffBtn:hover {
-      opacity: 0.8;
-    }
-    #logoutBtn {
-      background-color: #555;
-    }
-    #logoutBtn:hover {
-      opacity: 0.8;
+    :root {
+      --primary: #6366f1;
+      --success: #22c55e;
+      --danger: #ef4444;
+      --bg-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      --glass: rgba(255, 255, 255, 0.9);
     }
 
-    #dashboard {
-      display: none;
+    * { box-sizing: border-box; font-family: 'Inter', sans-serif; }
+
+    body {
+      background: var(--bg-gradient);
+      background-attachment: fixed;
+      margin: 0;
+      color: #1f2937;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
     }
+
+    h1 {
+      color: white;
+      margin-top: 40px;
+      font-weight: 700;
+      letter-spacing: -1px;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    }
+
+    /* --- LOGIN SECTION --- */
     #loginForm {
+      background: var(--glass);
+      backdrop-filter: blur(10px);
+      padding: 40px;
+      border-radius: 24px;
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+      width: 90%;
       max-width: 400px;
-      margin: 80px auto 20px;
-      background: white;
-      padding: 30px 20px;
-      border-radius: 15px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      margin-top: 60px;
+      text-align: center;
     }
+
     #loginForm input {
       width: 100%;
-      padding: 12px 15px;
-      margin: 10px 0 20px;
-      font-size: 1rem;
-      border: 1.5px solid #ccc;
-      border-radius: 10px;
-      box-sizing: border-box;
-      outline-offset: 2px;
-      transition: border-color 0.3s ease;
+      padding: 14px;
+      margin: 10px 0;
+      border: 1px solid #ddd;
+      border-radius: 12px;
+      font-size: 16px;
+      transition: all 0.3s;
     }
+
     #loginForm input:focus {
-      border-color: #1e88e5;
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.2);
     }
-    #loginForm button {
+
+    #loginBtn {
       width: 100%;
-      background-color: #1e88e5;
+      padding: 14px;
+      background: var(--primary);
       color: white;
-      padding: 12px;
-      font-size: 18px;
       border: none;
-      border-radius: 10px;
+      border-radius: 12px;
+      font-weight: 600;
       cursor: pointer;
-      transition: background-color 0.3s ease;
+      margin-top: 10px;
     }
-    #loginForm button:hover {
-      background-color: #1565c0;
+
+    /* --- DASHBOARD SECTION --- */
+    #dashboard {
+      display: none;
+      width: 100%;
+      max-width: 1000px;
+      padding: 20px;
     }
-    #dashboard .relay-container {
-      max-width: 960px;
-      margin: 20px auto 0;
+
+    .relay-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      margin-top: 30px;
+    }
+
+    .relay-card {
+      background: var(--glass);
+      padding: 30px;
+      border-radius: 24px;
+      text-align: center;
+      transition: transform 0.3s, box-shadow 0.3s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .relay-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    }
+
+    .relay-card h2 { margin: 0; font-size: 1.2rem; color: #4b5563; }
+
+    .status-badge {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      margin: 15px 0;
+      text-transform: uppercase;
+    }
+
+    .status-on { background: #dcfce7; color: #166534; }
+    .status-off { background: #f3f4f6; color: #4b5563; }
+
+    /* The Switch Button */
+    .toggle-btn {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      border: none;
+      cursor: pointer;
+      font-size: 24px;
       display: flex;
-      flex-wrap: wrap;
+      align-items: center;
       justify-content: center;
+      margin: 0 auto;
+      transition: all 0.4s;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
     }
-    @media (max-width: 700px) {
-      .relay-card {
-        width: 90%;
-        margin: 10px auto;
-        display: block;
-      }
-      body {
-        padding: 0 10px 60px;
-      }
+
+    .on-glow {
+      background: var(--success) !important;
+      color: white;
+      box-shadow: 0 0 20px rgba(34, 197, 94, 0.5);
     }
-    footer {
-      font-size: 0.9rem;
-      color: #666;
-      padding: 10px 0;
+
+    .off-style {
+      background: #e5e7eb;
+      color: #9ca3af;
+    }
+
+    /* --- ACTIONS --- */
+    .action-group {
+      display: flex;
+      gap: 15px;
+      justify-content: center;
       margin-top: 40px;
     }
+
+    .btn-action {
+      padding: 12px 24px;
+      border-radius: 12px;
+      border: none;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: 0.3s;
+    }
+
+    #allOffBtn { background: white; color: var(--danger); border: 2px solid var(--danger); }
+    #allOffBtn:hover { background: var(--danger); color: white; }
+
+    #logoutBtn { background: rgba(255,255,255,0.2); color: white; border: 1px solid white; }
+    #logoutBtn:hover { background: white; color: #333; }
+
+    footer { color: rgba(255,255,255,0.7); margin: 40px 0; font-size: 0.9rem; }
+
   </style>
 </head>
 <body>
@@ -283,3 +318,4 @@
   </script>
 </body>
 </html>
+
